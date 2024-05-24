@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "855795033829",
+    "project_id": "kalendar-747ef",
+    "storage_bucket": "kalendar-747ef.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:855795033829:android:8c8537012ef6833b40160c",
+        "android_client_info": {
+          "package_name": "com.kostiandev.kalendar"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCljuZZ2Iv9NJZuhjX4XeXdWjWVd7emcRU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

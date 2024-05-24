@@ -1,7 +1,9 @@
-import logo from '../../assets/icons/logo.png';
-import calendar from '../../assets/icons/calendar_11084439.png';
+import calendar from '../../assets/icons/calendar.png';
+import view from '../../assets/icons/view.png';
+import hide from '../../assets/icons/hide.png';
 
 export default {
-    logo,
     calendar,
+    view,
+    hide
 };
