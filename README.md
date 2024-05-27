@@ -1,0 +1,1 @@
+The project is a simple calendar application, with the ability to register users, as well as add and delete events in the calendar. Everything was written using React Native framework and Expo platform.
