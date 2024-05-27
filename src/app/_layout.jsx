@@ -40,7 +40,7 @@ const RootLayout = () => {
     return null;
   }
 
-  if (!fontsLoaded && !error) {
+  if (!fontsLoaded && !fontError) {
     return null;
   }
 

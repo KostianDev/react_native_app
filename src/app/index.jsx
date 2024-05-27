@@ -9,15 +9,16 @@ import CustomButton from '../components/CustomButton';
 import { colors } from '../constants/colors';
 import images from '../constants/images';
 import { useGlobalContext } from './context/GlobalProvider';
+import Loader from '../components/Loader';
 
 const WelcomePage = () => {
   const { user, initializing } = useGlobalContext();
 
   if (!initializing && user) return <Redirect href="/home" />;
-  if (initializing) return null;
 
   return (
     <SafeAreaView style={ styles.container }>
+      <Loader initializing={initializing} />
       <LinearGradient 
         colors={[ colors.bg1, colors.bg2 ]} 
         style={ styles.container }

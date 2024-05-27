@@ -8,4 +8,12 @@ export const colors = {
     bg2: '#030712',
     formField: '#292F3B',
     placeholder: '#4B5360',
+    calendarBg: '#03223E',
+    days: '#A1CAE0',
+    monthDays: '#3679AD',
+    monthTitle: '#A4C8E0',
+    bgDays: '#1F4E78',
+    selectedDayBg: '#F7FCFF',
+    selectedDay: '#02213D',
+    currentDay: '#E9F2F7',
 };

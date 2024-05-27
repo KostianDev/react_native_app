@@ -44,7 +44,7 @@ const FormField = ({
   );
 };
 
-export default FormField
+export default FormField;
 
 const styles = StyleSheet.create({
   title: {
