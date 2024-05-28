@@ -17,27 +17,6 @@ const HomeTab = () => {
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
   const [currentMonth, setCurrentMonth] = useState(format(new Date(), 'yyyy-MM'));
   const user = auth().currentUser;
-  
-  const fetchEventsForSelectedDate = async () => {
-    const eventsSnapshot = await firestore()
-      .collection('users')
-      .doc(user.uid)
-      .collection('events')
-      .where('date', '==', selectedDate)
-      .get();
-
-    const fetchedEvents = eventsSnapshot.docs.map(doc => {
-      const data = doc.data();
-      return {
-        id: doc.id,
-        ...data,
-        startTime: data.startTime.toDate(),
-        endTime: data.endTime.toDate(),
-      };
-    });
-
-    setEvents(fetchedEvents);
-  };
 
   const fetchEventsForMonth = useCallback(async (month) => {
     const startDate = startOfMonth(new Date(month));
@@ -66,23 +45,25 @@ const HomeTab = () => {
       return acc;
     }, {});
 
+    if (selectedDate in datesWithEvents) {
+      datesWithEvents[selectedDate] = { ...datesWithEvents[selectedDate], selected: true };
+    } else {
+      datesWithEvents[selectedDate] = { selected: true };
+    }
+
     setMarkedDates(datesWithEvents);
-  }, []);
+    setEvents(fetchedEvents.filter(event => event.date === selectedDate));
+  }, [selectedDate, user.uid]);
 
   useFocusEffect(
     useCallback(() => {
       fetchEventsForMonth(currentMonth);
-      fetchEventsForSelectedDate();
     }, [currentMonth])
   );
 
   useEffect(() => {
     fetchEventsForMonth(currentMonth);
   }, [currentMonth, fetchEventsForMonth]);
-
-  useEffect(() => {
-    fetchEventsForSelectedDate();
-  }, [selectedDate]);
 
   const handleMonthChange = (month) => {
     setCurrentMonth(month.dateString.substring(0, 7));
@@ -104,6 +85,7 @@ const HomeTab = () => {
     }
 
     setMarkedDates(newMarkedDates);
+    setEvents(events.filter(event => event.date === day.dateString));
   };
 
   const handleLogout = () => {
@@ -151,7 +133,6 @@ const HomeTab = () => {
                     .collection('events')
                     .doc(item.id)
                     .delete();
-                  await fetchEventsForSelectedDate();
                   await fetchEventsForMonth(currentMonth);
                   }}
                 >
