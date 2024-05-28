@@ -53,7 +53,7 @@ const HomeTab = () => {
 
     setMarkedDates(datesWithEvents);
     setEvents(fetchedEvents.filter(event => event.date === selectedDate));
-  }, [selectedDate, user.uid]);
+  }, [selectedDate]);
 
   useFocusEffect(
     useCallback(() => {
