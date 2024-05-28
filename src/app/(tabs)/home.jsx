@@ -1,20 +1,110 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { View, StyleSheet, Text, SafeAreaView, FlatList, TouchableOpacity, Image } from 'react-native';
 import { Calendar } from 'react-native-calendars';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import { FAB } from 'react-native-paper';
-import { router } from 'expo-router';
+import { router, useFocusEffect } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
-import { StatusBar } from 'expo-status-bar';
+import { startOfMonth, endOfMonth, format } from 'date-fns';
 
 import { colors } from '../../constants/colors';
 import icons from '../../constants/icons';
 
 const HomeTab = () => {
   const [events, setEvents] = useState([]);
+  const [markedDates, setMarkedDates] = useState({});
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
+  const [currentMonth, setCurrentMonth] = useState(format(new Date(), 'yyyy-MM'));
   const user = auth().currentUser;
+  
+  const fetchEventsForSelectedDate = async () => {
+    const eventsSnapshot = await firestore()
+      .collection('users')
+      .doc(user.uid)
+      .collection('events')
+      .where('date', '==', selectedDate)
+      .get();
+
+    const fetchedEvents = eventsSnapshot.docs.map(doc => {
+      const data = doc.data();
+      return {
+        id: doc.id,
+        ...data,
+        startTime: data.startTime.toDate(),
+        endTime: data.endTime.toDate(),
+      };
+    });
+
+    setEvents(fetchedEvents);
+  };
+
+  const fetchEventsForMonth = useCallback(async (month) => {
+    const startDate = startOfMonth(new Date(month));
+    const endDate = endOfMonth(new Date(month));
+
+    const eventsSnapshot = await firestore()
+      .collection('users')
+      .doc(user.uid)
+      .collection('events')
+      .where('date', '>=', format(startDate, 'yyyy-MM-dd'))
+      .where('date', '<=', format(endDate, 'yyyy-MM-dd'))
+      .get();
+
+    const fetchedEvents = eventsSnapshot.docs.map(doc => {
+      const data = doc.data();
+      return {
+        id: doc.id,
+        ...data,
+        startTime: data.startTime.toDate(),
+        endTime: data.endTime.toDate(),
+      };
+    });
+
+    const datesWithEvents = fetchedEvents.reduce((acc, event) => {
+      acc[event.date] = { marked: true };
+      return acc;
+    }, {});
+
+    setMarkedDates(datesWithEvents);
+  }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchEventsForMonth(currentMonth);
+      fetchEventsForSelectedDate();
+    }, [currentMonth])
+  );
+
+  useEffect(() => {
+    fetchEventsForMonth(currentMonth);
+  }, [currentMonth, fetchEventsForMonth]);
+
+  useEffect(() => {
+    fetchEventsForSelectedDate();
+  }, [selectedDate]);
+
+  const handleMonthChange = (month) => {
+    setCurrentMonth(month.dateString.substring(0, 7));
+  };
+
+  const handleDayPress = (day) => {
+    const newMarkedDates = { ...markedDates };
+    Object.keys(newMarkedDates).forEach(date => {
+      if (newMarkedDates[date].selected) {
+        delete newMarkedDates[date].selected;
+      }
+    });
+
+    setSelectedDate(day.dateString);
+    if (newMarkedDates[day.dateString]) {
+      newMarkedDates[day.dateString] = { ...newMarkedDates[day.dateString], selected: true };
+    } else {
+      newMarkedDates[day.dateString] = { selected: true };
+    }
+
+    setMarkedDates(newMarkedDates);
+  };
 
   const handleLogout = () => {
     auth()
@@ -24,33 +114,6 @@ const HomeTab = () => {
       });
   };
 
-  const fetchEvents = async () => {
-    const eventsSnapshot = await firestore().collection('users').doc(user.uid).collection('events').where('date', '==', selectedDate).get();
-    const fetchedEvents = eventsSnapshot.docs.map(doc => {
-      const data = doc.data();
-      return {
-        id: doc.id,
-        ...data,
-        startTime: data.startTime.toDate().toLocaleTimeString(),
-        endTime: data.endTime.toDate().toLocaleTimeString(),
-      };
-    });
-    fetchedEvents.sort((a, b) => a.startTime.localeCompare(b.startTime));
-
-    setEvents(fetchedEvents);
-  };
-
-  useEffect(() => {
-    firestore()
-      .collection('users')
-      .doc(user.uid)
-      .set({});
-  }), [];
-
-  useEffect(() => {
-    fetchEvents();
-  }, [selectedDate]);
-
   return (
     <LinearGradient 
         colors={[colors.bg1, colors.bg2]}
@@ -58,8 +121,10 @@ const HomeTab = () => {
     >
       <SafeAreaView style={styles.container}>
         <Calendar
-          onDayPress={(day) => setSelectedDate(day.dateString)}
-          markedDates={{ [selectedDate]: { selected: true } }}
+          onDayPress={handleDayPress}
+          markedDates={{ ...markedDates }}
+          onMonthChange={handleMonthChange}
+          hideExtraDays
           theme={styles.theme}
           style={styles.calendar}
         />
@@ -77,16 +142,17 @@ const HomeTab = () => {
                 </Text>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                 <Text style={styles.eventText}>
-                  {item.startTime} - {item.endTime}
+                  {item.startTime.toLocaleTimeString()} - {item.endTime.toLocaleTimeString()}
                 </Text>
-                <TouchableOpacity onPress={() => {
-                  firestore()
+                <TouchableOpacity onPress={async () => {
+                  await firestore()
                     .collection('users')
                     .doc(user.uid)
                     .collection('events')
                     .doc(item.id)
                     .delete();
-                  fetchEvents();
+                  await fetchEventsForSelectedDate();
+                  await fetchEventsForMonth(currentMonth);
                   }}
                 >
                   <Image
@@ -187,8 +253,8 @@ const styles = StyleSheet.create({
     todayTextColor: colors.secondary2,
     dayTextColor: colors.days,
     textDisabledColor: colors.placeholder,
-    dotColor: colors.secondary1,
-    selectedDotColor: colors.text,
+    dotColor: colors.secondary2,
+    selectedDotColor: colors.secondary2,
     arrowColor: colors.text,
     monthTextColor: colors.monthTitle,
     textDayFontFamily: 'Poppins-Semibold',
