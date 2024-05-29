@@ -1,17 +1,18 @@
-import { View, ActivityIndicator, Dimensions, StyleSheet } from "react-native";
+import { StatusBar } from 'expo-status-bar';
+import { View, ActivityIndicator, StyleSheet } from 'react-native';
 
 const Loader = ({ initializing }) => {
-  const screenHeight = Dimensions.get("screen").height;
 
   if (!initializing) return null;
 
   return (
-    <View style={[styles.container, { height: screenHeight }]}>
+    <View style={styles.container}>
       <ActivityIndicator
         animating={initializing}
-        color="#fff"
+        color='#fff'
         size={50}
       />
+      <StatusBar backgroundColor='#020F2F' style='light'/>
     </View>
   );
 };
@@ -19,13 +20,13 @@ const Loader = ({ initializing }) => {
 export default Loader;
 
 const styles = StyleSheet.create({
-    container: {
-        position: "absolute",
-        justifyContent: "center",
-        alignItems: "center",
-        width: "100%",
-        height: "100%",
-        backgroundColor: "rgba(0, 0, 0, 0.6)",
-        zIndex: 10,
-    },
-    });
+  container: {
+    position: 'absolute',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '100%',
+    height: '100%',
+    backgroundColor: 'rgba(0, 0, 0, 0.6)',
+    zIndex: 10,
+  },
+});

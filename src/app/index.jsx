@@ -14,15 +14,15 @@ import Loader from '../components/Loader';
 const WelcomePage = () => {
   const { user, initializing } = useGlobalContext();
 
-  if (!initializing && user) return <Redirect href="/home" />;
+  if (!initializing && user) return <Redirect href='/home' />;
 
   return (
-    <SafeAreaView style={ styles.container }>
-      <Loader initializing={initializing} />
-      <LinearGradient 
-        colors={[ colors.bg1, colors.bg2 ]} 
-        style={ styles.container }
-      >
+    <LinearGradient 
+      colors={[ colors.bg1, colors.bg2 ]} 
+      style={ styles.container }
+    >
+      <SafeAreaView style={ styles.container }>
+        <Loader initializing={initializing} />
         <ScrollView contentContainerStyle={ styles.container }>
           <View style={ styles.content }>
             <Image
@@ -33,13 +33,13 @@ const WelcomePage = () => {
               Welcome to Kalendar!
             </Text>
             <CustomButton
-              title="Continue with Email"
+              title='Continue with Email'
               onPress={() => router.push('../sign-in')}
               containerStyles={[ styles.button, { backgroundColor: colors.secondary1 }]}
               textStyles={ styles.buttonText }
             />
             <CustomButton
-              title="Continue as a Guest"
+              title='Continue as a Guest'
               onPress={() => auth()
                 .signInAnonymously()
                 .then(() => {
@@ -54,8 +54,8 @@ const WelcomePage = () => {
             />
           </View>
         </ScrollView>
-      </LinearGradient>
-    </SafeAreaView>
+      </SafeAreaView>
+    </LinearGradient>
   );
 };
 

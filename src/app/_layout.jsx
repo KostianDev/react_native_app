@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useFonts } from 'expo-font';
 import { SplashScreen, Stack } from "expo-router";
-import { StatusBar } from 'expo-status-bar';
-import { View } from 'react-native';
 
 import GlobalProvider from './context/GlobalProvider';
+import { StatusBar } from 'react-native';
 
 const RootLayout = () => {
   const [fontsLoaded, fontError] = useFonts({
@@ -33,29 +32,27 @@ const RootLayout = () => {
 
     if (fontsLoaded) {
       SplashScreen.hideAsync();
-    }
+    };
   }, [fontsLoaded, fontError]);
 
   if (!fontsLoaded) {
     return null;
-  }
+  };
 
   if (!fontsLoaded && !fontError) {
     return null;
-  }
+  };
 
   return (
     <GlobalProvider>
       <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-        <Stack.Screen name="index" options={{ headerShown: false }} />
+        <Stack.Screen name='(tabs)' options={{ headerShown: false }} />
+        <Stack.Screen name='(auth)' options={{ headerShown: false }} />
+        <Stack.Screen name='index' options={{ headerShown: false }} />
       </Stack>
-      <View>
-        <StatusBar backgroundColor="#020F2F" style="light" />
-      </View>
+      <StatusBar backgroundColor='#020F2F' style='light' />
     </GlobalProvider>
-  )
+  );
 };
 
 export default RootLayout;

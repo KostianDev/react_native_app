@@ -14,18 +14,18 @@ import CustomButton from '../../components/CustomButton';
 
 const SignUp = () => {
   const [form, setForm] = useState({
-    email: "",
-    password: "",
-    rePassword: "",
+    email: '',
+    password: '',
+    rePassword: '',
   });
 
   const submit = () => {
-    if (form.email === "" || form.password === "" || form.rePassword === "") {
-      Alert.alert("Please fill in all fields");
+    if (form.email === '' || form.password === '' || form.rePassword === '') {
+      Alert.alert('Please fill in all fields');
       return null;
     };
     if (form.password !== form.rePassword) {
-      Alert.alert("Passwords do not match");
+      Alert.alert('Passwords do not match');
       return null;
     };
 
@@ -55,31 +55,31 @@ const SignUp = () => {
               Sign Up
             </Text>
             <FormField
-              title="Email"
+              title='Email'
               value={form.email}
-              placeholder="Enter your email"
+              placeholder='Enter your email'
               handleChangeText={(e) => setForm({ ...form, email: e })}
               otherStyles={{ marginBottom:12 }}
-              keyboardType="email-address"
+              keyboardType='email-address'
             />
             <FormField
-              title="Password"
+              title='Password'
               value={form.password}
-              placeholder="Enter your password"
+              placeholder='Enter your password'
               handleChangeText={(e) => setForm({ ...form, password: e })}
               isPassword={true}
               otherStyles={{ marginBottom:12 }}
             />
             <FormField
-              title="Confirm Password"
+              title='Confirm Password'
               value={form.rePassword}
-              placeholder="Enter your password again"
+              placeholder='Enter your password again'
               handleChangeText={(e) => setForm({ ...form, rePassword: e })}
               isPassword={true}
               otherStyles={{}}
             />
             <CustomButton
-              title="Sign Up"
+              title='Sign Up'
               onPress={submit}
               containerStyles={[styles.button, { backgroundColor: colors.secondary1 }]}
               textStyles={[styles.buttonText, {}]}

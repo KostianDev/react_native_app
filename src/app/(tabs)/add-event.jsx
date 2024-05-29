@@ -24,9 +24,9 @@ const AddEventTab = () => {
   
   const handleAddEvent = async () => {
     if (form.title === '') {
-        Alert.alert("Please give your event a title");
+        Alert.alert('Please give your event a title');
         return null;
-    }
+    };
 
     await firestore()
       .collection('users')
@@ -46,13 +46,13 @@ const AddEventTab = () => {
     router.back();
   };
 
-  const onChangeStartTime = (event, selectedDate) => {
+  const onChangeStartTime = (selectedDate) => {
     const currentDate = selectedDate || startTime;
     setShowStartTimePicker(false);
     setStartTime(currentDate);
   };
 
-  const onChangeEndTime = (event, selectedDate) => {
+  const onChangeEndTime = (selectedDate) => {
     const currentDate = selectedDate || endTime;
     setShowEndTimePicker(false);
     setEndTime(currentDate);
@@ -68,9 +68,9 @@ const AddEventTab = () => {
         <ScrollView>
         <View style={styles.content}>
           <FormField
-            title="Title"
+            title='Title'
             value={form.title}
-            placeholder="Enter event title"
+            placeholder='Enter event title'
             handleChangeText={(e) => setForm({ ...form, title: e })}
             otherStyles={{ marginBottom: 12, marginTop: '30%' }}
           />
@@ -86,8 +86,8 @@ const AddEventTab = () => {
           {showStartTimePicker && (
             <DateTimePicker
               value={startTime}
-              mode="time"
-              display="default"
+              mode='time'
+              display='default'
               onChange={onChangeStartTime}
             />
           )}
@@ -101,20 +101,20 @@ const AddEventTab = () => {
           {showEndTimePicker && (
             <DateTimePicker
               value={endTime}
-              mode="time"
-              display="default"
+              mode='time'
+              display='default'
               onChange={onChangeEndTime}
             />
           )}
           <FormField
-            title="Description"
+            title='Description'
             value={form.description}
-            placeholder="Enter event description"
+            placeholder='Enter event description'
             handleChangeText={(e) => setForm({ ...form, description: e })}
             otherStyles={{ marginBottom: 12, marginTop: 12 }}
           />
           <CustomButton
-            title="Add Event"
+            title='Add Event'
             onPress={handleAddEvent}
             containerStyles={[styles.button, { backgroundColor: colors.bgDays }]}
             textStyles={styles.buttonText}

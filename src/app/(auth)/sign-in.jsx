@@ -14,13 +14,13 @@ import CustomButton from '../../components/CustomButton';
 
 const SignIn = () => {
   const [form, setForm] = useState({
-    email: "",
-    password: "",
+    email: '',
+    password: '',
   });
 
   const submit = () => {
-    if (form.email === "" || form.password === "") {
-      Alert.alert("Please fill in all fields");
+    if (form.email === '' || form.password === '') {
+      Alert.alert('Please fill in all fields');
       return null;
     };
 
@@ -50,23 +50,23 @@ const SignIn = () => {
               Sign In
             </Text>
             <FormField
-              title="Email"
+              title='Email'
               value={form.email}
-              placeholder="Enter your email"
+              placeholder='Enter your email'
               handleChangeText={(e) => setForm({ ...form, email: e })}
               otherStyles={{ marginBottom:12 }}
-              keyboardType="email-address"
+              keyboardType='email-address'
             />
             <FormField
-              title="Password"
+              title='Password'
               value={form.password}
-              placeholder="Enter your password"
+              placeholder='Enter your password'
               handleChangeText={(e) => setForm({ ...form, password: e })}
               isPassword={true}
               otherStyles={{}}
             />
             <CustomButton
-              title="Sign In"
+              title='Sign In'
               onPress={submit}
               containerStyles={[styles.button, { backgroundColor: colors.secondary1 }]}
               textStyles={[styles.buttonText, {}]}

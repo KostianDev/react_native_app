@@ -1,4 +1,4 @@
-import { Text, TouchableOpacity, StyleSheet } from "react-native";
+import { Text, TouchableOpacity, StyleSheet } from 'react-native';
 
 const CustomButton = ({
     title,
@@ -24,11 +24,11 @@ export default CustomButton;
 const styles = StyleSheet.create({
     container: {
         borderRadius: 10,
-        alignItems: "center",
-        justifyContent: "center",
+        alignItems: 'center',
+        justifyContent: 'center',
     },
     text: {
-        fontFamily: "Poppins-SemiBold",
-        textAlign: "center",
+        fontFamily: 'Poppins-SemiBold',
+        textAlign: 'center',
     },
 });

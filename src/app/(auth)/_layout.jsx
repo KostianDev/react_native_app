@@ -6,13 +6,13 @@ const AuthLayout = () => {
   return (
     <>
       <Stack>
-        <Stack.Screen name="sign-in" options={{ headerShown: false }} />
-        <Stack.Screen name="sign-up" options={{ headerShown: false }} />
+        <Stack.Screen name='sign-in' options={{ headerShown: false }} />
+        <Stack.Screen name='sign-up' options={{ headerShown: false }} />
       </Stack>
 
-      <StatusBar backgroundColor="#020F2F" style="light" />
+      <StatusBar backgroundColor='#020F2F' style='light' />
     </>
-  )
-}
+  );
+};
 
-export default AuthLayout
+export default AuthLayout;

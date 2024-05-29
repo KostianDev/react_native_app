@@ -49,7 +49,7 @@ const HomeTab = () => {
       datesWithEvents[selectedDate] = { ...datesWithEvents[selectedDate], selected: true };
     } else {
       datesWithEvents[selectedDate] = { selected: true };
-    }
+    };
 
     setMarkedDates(datesWithEvents);
     setEvents(fetchedEvents.filter(event => event.date === selectedDate));
@@ -74,7 +74,7 @@ const HomeTab = () => {
     Object.keys(newMarkedDates).forEach(date => {
       if (newMarkedDates[date].selected) {
         delete newMarkedDates[date].selected;
-      }
+      };
     });
 
     setSelectedDate(day.dateString);
@@ -82,7 +82,7 @@ const HomeTab = () => {
       newMarkedDates[day.dateString] = { ...newMarkedDates[day.dateString], selected: true };
     } else {
       newMarkedDates[day.dateString] = { selected: true };
-    }
+    };
 
     setMarkedDates(newMarkedDates);
     setEvents(events.filter(event => event.date === day.dateString));
