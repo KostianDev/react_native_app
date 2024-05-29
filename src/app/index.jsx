@@ -2,8 +2,9 @@ import { StyleSheet, Text, View, Image, ScrollView, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router, Redirect } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
-import React from 'react';
+import React, { useEffect } from 'react';
 import auth from '@react-native-firebase/auth';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
 
 import CustomButton from '../components/CustomButton';
 import { colors } from '../constants/colors';
@@ -16,13 +17,19 @@ const WelcomePage = () => {
 
   if (!initializing && user) return <Redirect href='/home' />;
 
+  useEffect(() => {
+    GoogleSignin.configure({
+      webClientId: '855795033829-upnpvanvcfov3in75a19h374h0bfptc0.apps.googleusercontent.com'
+    });
+  }, []);
+
   return (
     <LinearGradient 
       colors={[ colors.bg1, colors.bg2 ]} 
       style={ styles.container }
     >
       <SafeAreaView style={ styles.container }>
-        <Loader initializing={initializing} />
+        <Loader/>
         <ScrollView contentContainerStyle={ styles.container }>
           <View style={ styles.content }>
             <Image

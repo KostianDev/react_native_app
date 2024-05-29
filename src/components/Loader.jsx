@@ -1,7 +1,10 @@
 import { StatusBar } from 'expo-status-bar';
 import { View, ActivityIndicator, StyleSheet } from 'react-native';
 
-const Loader = ({ initializing }) => {
+import { useGlobalContext } from '../app/context/GlobalProvider';
+
+const Loader = () => {
+  const { initializing } = useGlobalContext();
 
   if (!initializing) return null;
 

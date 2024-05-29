@@ -1,10 +1,11 @@
-import { ScrollView, StyleSheet, Text, View, Image, Alert } from 'react-native';
+import { ScrollView, StyleSheet, Text, View, Image, Alert, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useState } from 'react';
 import React from 'react';
 import auth from '@react-native-firebase/auth';
 import { router, Link } from 'expo-router';
+import { GoogleSignin, GoogleSigninButton } from '@react-native-google-signin/google-signin';
 
 import FormField from '../../components/FormField';
 
@@ -32,7 +33,20 @@ const SignIn = () => {
       .catch(error => {
         Alert.alert(error.nativeErrorMessage);
       });
-}
+  };
+
+  const handleGoogleSignIn = async () => {
+    await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
+    const { idToken } = await GoogleSignin.signIn();
+    const googleCredential = auth.GoogleAuthProvider.credential(idToken);
+
+    return auth()
+      .signInWithCredential(googleCredential)
+      .then(() => router.replace('/home'))
+      .catch(error => {
+        Alert.alert(error.nativeErrorMessage);
+      });
+  };
 
   return (
     <SafeAreaView style={ styles.container }>
@@ -71,13 +85,26 @@ const SignIn = () => {
               containerStyles={[styles.button, { backgroundColor: colors.secondary1 }]}
               textStyles={[styles.buttonText, {}]}
             />
-            <View style={styles.bottom}>
-              <Text style={styles.bottomText}>
-                Don't have an account?
-              </Text>
-              <Link href={'/sign-up'} style={styles.link}>
-                Sign Up
-              </Link>
+            <View>
+              <View style={styles.bottom}>
+                <Text style={styles.bottomText}>
+                  Don't have an account?
+                </Text>
+                <Link href={'/sign-up'} style={styles.link}>
+                  Sign Up
+                </Link>
+              </View>
+              <View style={{ alignItems: 'center', marginTop: 10}}>
+                <Text style={styles.bottomText}>
+                  or
+                </Text>
+                <TouchableOpacity onPress={handleGoogleSignIn}>
+                  <Image
+                    source={images.google}
+                    style={styles.google}
+                  />
+                </TouchableOpacity>
+              </View>
             </View>
           </View>
         </ScrollView>
@@ -94,7 +121,6 @@ const styles = StyleSheet.create({
   },
   content: {
     width: '100%',
-    height: '100%',
     flex: 1,
     justifyContent: 'center',
     paddingLeft: 18,
@@ -109,7 +135,6 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
     maxWidth: 90,
     maxHeight: 90,
-    marginTop: '35%',
     marginBottom: 10,
     marginLeft: -10,
   },
@@ -139,5 +164,12 @@ const styles = StyleSheet.create({
     color: colors.secondary2,
     fontFamily: 'Poppins-SemiBold',
     fontSize: 16,
+  },
+  google: {
+    resizeMode: 'contain',
+    maxWidth: 40,
+    maxHeight: 40,
+    marginTop: 20,
+    alignSelf: 'center',
   },
 });
