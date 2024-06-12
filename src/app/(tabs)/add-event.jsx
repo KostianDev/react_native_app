@@ -46,18 +46,17 @@ const AddEventTab = () => {
     router.back();
   };
 
-  const onChangeStartTime = (selectedDate) => {
+  const onChangeStartTime = (event, selectedDate) => {
     const currentDate = selectedDate || startTime;
     setShowStartTimePicker(false);
     setStartTime(currentDate);
   };
 
-  const onChangeEndTime = (selectedDate) => {
+  const onChangeEndTime = (event, selectedDate) => {
     const currentDate = selectedDate || endTime;
     setShowEndTimePicker(false);
     setEndTime(currentDate);
   };
-
 
   return (
     <SafeAreaView style={styles.container}>
